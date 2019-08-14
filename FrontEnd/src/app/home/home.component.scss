@@ -1,0 +1,40 @@
+$whiteColor:#fff;
+
+.login {
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    .form{
+        position: absolute;
+        top: 50%;
+        text-align: center;
+        width: 100%;
+        h3{
+            color: $whiteColor;
+        }
+        input{
+            border: none;
+            border-bottom: solid 2px $whiteColor;
+            outline: none;
+            background: transparent;
+            padding-bottom: 15px;
+            text-align: center;
+            width: 400px;
+            color: $whiteColor;
+            font-weight: 300;
+            font-size: 15px;
+        }
+    }
+}
+
+.chatpanel{
+    background-color: aquamarine;
+    color: blueviolet;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    .info{
+        text-align: center;
+    }
+}

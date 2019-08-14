@@ -1,0 +1,23 @@
+<div *ngIf="isExist" class="chatpanel">
+    <div class="info">
+        <h5>
+            Hello : {{nickName}}
+        </h5>
+        <h5>
+            Your session id:
+            {{idSocket}}
+        </h5>
+    </div>
+</div>
+
+
+
+<div *ngIf="!isExist" class="login">
+    <div class="form">
+        <h3>
+            What is yours nickname?
+        </h3>
+        <input type="text" appAutofocus autofocus (keyup.enter)="submitNickname($event)" maxlength="14">
+
+    </div>
+</div>
