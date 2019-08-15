@@ -1,9 +1,7 @@
 export class UserDTO {
     // system event; device event or error event
-    socket: [
-        SocketLst
-    ];
-    name: string;
+    SocketId: [];
+    nickname: string;
 }
 
 export class SocketLst {

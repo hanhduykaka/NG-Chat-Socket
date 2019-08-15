@@ -7,6 +7,8 @@ import { HomeComponent } from './home/home.component';
 import { Page404Component } from './page404/page404.component';
 import { LoginComponent } from './login/login.component';
 import { AutofocusDirective } from './directives/autofocus.directive';
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { AutofocusDirective } from './directives/autofocus.directive';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

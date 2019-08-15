@@ -7,7 +7,25 @@
             Your session id:
             {{idSocket}}
         </h5>
+
+        <input (click)="logout()" class="btn btn-primary" type="button" value="Leave Chat">
+
+  <ul class="friends">
+    <li *ngFor="let item of lstFriend; trackBy:trackByFriend" class="cursor-pointer">
+        <a (click)="chatWithFriend(item.SocketId)">
+           {{item.nickname}} 
+        </a>
+    </li>
+  </ul>
+         
     </div>
+
+
+    <!-- <ul>
+        <li *ngFor="let item of testTrackBy; trackBy:trackByFn" >
+            {{item |json}}
+        </li>
+    </ul> -->
 </div>
 
 

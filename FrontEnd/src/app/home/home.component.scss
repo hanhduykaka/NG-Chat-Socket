@@ -36,5 +36,14 @@ $whiteColor:#fff;
     position: absolute;
     .info{
         text-align: center;
+        .friends{
+            list-style: none;
+            color: darkgreen;
+            padding-top: 5px;
+            
+        }
+        .cursor-pointer{
+            cursor: pointer;
+        }
     }
 }

@@ -31,26 +31,23 @@ io.on('connection', function(client) {
         var total_increase = io.engine.clientsCount;
         listUser = Object.keys(io.engine.clients);
         var temLstUserToBroadCast = [];
-        temLstUserToBroadCast = listUser.filter(x => x != client.id);
-
-        client.broadcast.emit('listUser', listUser);
+        temLstUserToBroadCast = listUser.filter(x => x != client.id);       
         client.emit('AllUser', temLstUserToBroadCast);
     });
 
-    client.on('submit_Email', email => {
+    client.on('send-nickname', nickname => {
+        console.log(nickname);
         if (listObjUser.length > 0) {
-            var checkExist = listObjUser.find(x => x.Email == email);
+            var checkExist = listObjUser.find(x => x.nickname == nickname);
             if (!checkExist) {
-                listObjUser.push({ Email: email, SocketId: [client.id] });
+                listObjUser.push({ nickname: nickname, SocketId: [client.id] });
             } else {
-
                 checkExist.SocketId = checkExist.SocketId.concat([client.id]);
-
             }
         } else {
-            listObjUser.push({ Email: email, SocketId: [client.id] });
+            listObjUser.push({ nickname: nickname, SocketId: [client.id] });
         }
-
+        client.broadcast.emit('listUser', listObjUser);
         client.emit('resendEmailToClient', listObjUser => {});
     });
 
@@ -65,7 +62,7 @@ io.on('connection', function(client) {
 
         listUser = Object.keys(io.engine.clients);
 
-        client.broadcast.emit('listUser', listUser);
+        // client.broadcast.emit('listUser', listUser);
 
         client.broadcast.emit('getCount', "Toàn hệ thống đang có: " + total_decrease + "đang online");
 

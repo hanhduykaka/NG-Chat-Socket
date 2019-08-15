@@ -9,6 +9,7 @@ export class LocalStorageService {
     checkExist(key: string): boolean {
         return this.getItem(key) !== '' && this.getItem(key) !== undefined && this.getItem(key) !== null;
     }
+    
     setCurrentUser(key: string, data: string) {
         this.setItem(key, data);
     }
@@ -16,7 +17,12 @@ export class LocalStorageService {
     getItem(key: string) {
         return localStorage.getItem(key);
     }
+
     setItem(key: string, data: string) {
         localStorage.setItem(key, data);
+    }
+
+    clear(key: string) {
+        localStorage.removeItem(key);
     }
 }

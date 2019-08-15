@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as io from 'socket.io-client';
 import { LocalStorageService } from '../services/localStorage.service';
+import { Observable, from } from 'rxjs';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { UserDTO } from '../models/users.model';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -13,45 +16,87 @@ export class HomeComponent implements OnInit {
   idSocket: string;
   isExist: boolean;
   nickName: string = this.localStorageService.getItem('user');
-
-    constructor(
-      private localStorageService: LocalStorageService
-    ) {
-  this.socket = io.connect('http://localhost:5000');
-}
-
-ngOnInit() {
-  this.socket.on('broad', (msg: any) => {
-    this.messages.push(msg);
-    this.idSocket = msg;
-    this.isExist = this.localStorageService.checkExist('user');
-  });
-
-  this.messages = new Array();
-
-
-  this.socket.emit('event1', {
-    msg: 'Client to server, can you hear me server?'
-  });
-
-}
-
-
-submitNickname(input: KeyboardEvent) {
-  const inputValue = input.target['value'];
-  if (inputValue) {
-    this.localStorageService.setCurrentUser('user', inputValue);
-    this.nickName = inputValue;
-    this.isExist = true;
+  testTrackBy;
+  lstFriend: Array<UserDTO>;
+  constructor(
+    private localStorageService: LocalStorageService,
+    private httpClient: HttpClient,
+  ) {
+    this.socket = io.connect('http://localhost:5000');
   }
-}
 
-sendMessage() {
-  const message = {
-    text: this.messageText
-  };
-  this.socket.emit('send-message', message);
-  this.messageText = '';
-}
+  ngOnInit() {
+    this.socket.on('broad', (msgSocketId: any) => {
+      this.messages.push(msgSocketId);
+      this.idSocket = msgSocketId;
+      this.isExist = this.localStorageService.checkExist('user');
+      this.socket.emit('join', 'Hello World from client');
+    });
+
+    this.messages = new Array();
+    if (this.nickName) {
+      this.socket.emit('send-nickname', this.nickName);
+    }
+
+
+    this.socket.on('listUser', (msg: any) => {
+      this.lstFriend  = msg;
+      console.log(this.lstFriend)
+      if (msg && this.nickName && this.lstFriend) {
+        this.lstFriend.filter(x => x.nickname !== this.nickName);
+      }
+    });
+
+  }
+
+
+  Watcher() {
+    this.getJobTemplate().subscribe((data) => {
+      this.testTrackBy = data;
+    });
+  }
+
+  getJobTemplate(): Observable<any> {
+    // Create new HttpParams   
+    return this.httpClient.get<any>('http://localhost:9999/api/randomTracby');
+  }
+
+  trackByFn(index, item) {
+    return item.code;
+  }
+
+  trackByFriend(index, item) {
+    return item.nickName;
+  }
+
+  chatWithFriend(listSocketId){
+console.log(listSocketId)
+  }
+
+
+
+  submitNickname(input: KeyboardEvent) {
+    const inputValue = input.target['value'];
+    if (inputValue) {
+      this.localStorageService.setCurrentUser('user', inputValue);
+      this.nickName = inputValue;
+      this.socket.emit('send-nickname', this.nickName);
+      this.isExist = true;
+    }
+  }
+
+  sendMessage() {
+    const message = {
+      text: this.messageText
+    };
+    this.socket.emit('send-message', message);
+    this.messageText = '';
+  }
+
+  logout() {
+    this.localStorageService.clear('user');
+    window.location.reload();
+    this.isExist = false;
+  }
 
 }
