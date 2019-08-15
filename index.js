@@ -31,12 +31,18 @@ io.on('connection', function(client) {
         var total_increase = io.engine.clientsCount;
         listUser = Object.keys(io.engine.clients);
         var temLstUserToBroadCast = [];
-        temLstUserToBroadCast = listUser.filter(x => x != client.id);       
+        temLstUserToBroadCast = listUser.filter(x => x != client.id);    
+        console.log("join");
+        console.log(listObjUser);
+        client.emit('listUser', listObjUser); 
         client.emit('AllUser', temLstUserToBroadCast);
     });
 
     client.on('send-nickname', nickname => {
+        console.log("send-nickname");
         console.log(nickname);
+        console.log(listObjUser);
+
         if (listObjUser.length > 0) {
             var checkExist = listObjUser.find(x => x.nickname == nickname);
             if (!checkExist) {

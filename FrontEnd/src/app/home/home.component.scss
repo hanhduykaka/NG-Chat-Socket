@@ -38,8 +38,14 @@ $whiteColor:#fff;
         text-align: center;
         .friends{
             list-style: none;
-            color: darkgreen;
+            color: darkgreen;    
+            max-width: 320px;         
+            max-height: 30vh;
+            overflow-y: auto;
+            margin: 0 auto;
+            margin-top: 5px;
             padding-top: 5px;
+            background-color: ghostwhite;
             
         }
         .cursor-pointer{

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import * as io from 'socket.io-client';
 import { LocalStorageService } from '../services/localStorage.service';
 import { Observable, from } from 'rxjs';
@@ -9,7 +9,7 @@ import { UserDTO } from '../models/users.model';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   messageText: string;
   messages: Array<any>;
   socket: SocketIOClient.Socket;
@@ -40,11 +40,7 @@ export class HomeComponent implements OnInit {
 
 
     this.socket.on('listUser', (msg: any) => {
-      this.lstFriend  = msg;
-      console.log(this.lstFriend)
-      if (msg && this.nickName && this.lstFriend) {
-        this.lstFriend.filter(x => x.nickname !== this.nickName);
-      }
+      this.processListFriend(msg);
     });
 
   }
@@ -69,8 +65,8 @@ export class HomeComponent implements OnInit {
     return item.nickName;
   }
 
-  chatWithFriend(listSocketId){
-console.log(listSocketId)
+  chatWithFriend(listSocketId) {
+    console.log(listSocketId)
   }
 
 
@@ -82,7 +78,25 @@ console.log(listSocketId)
       this.nickName = inputValue;
       this.socket.emit('send-nickname', this.nickName);
       this.isExist = true;
+      window.location.reload();
     }
+  }
+
+  processListFriend(msg) {
+    if (msg && this.nickName) {
+      this.lstFriend = msg;
+      this.lstFriend = this.lstFriend.filter(x => {
+        return x.nickname !== this.nickName;
+      });
+    }
+  }
+
+
+  ngAfterViewInit(): void {
+    this.socket.on('listUser', (msg: any) => {
+      this.processListFriend(msg);
+    });
+
   }
 
   sendMessage() {
