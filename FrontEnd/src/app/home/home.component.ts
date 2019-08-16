@@ -9,7 +9,7 @@ import { UserDTO } from '../models/users.model';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements OnInit {
   messageText: string;
   messages: Array<any>;
   socket: SocketIOClient.Socket;
@@ -69,8 +69,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log(listSocketId)
   }
 
-
-
   submitNickname(input: KeyboardEvent) {
     const inputValue = input.target['value'];
     if (inputValue) {
@@ -92,12 +90,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
 
-  ngAfterViewInit(): void {
-    this.socket.on('listUser', (msg: any) => {
-      this.processListFriend(msg);
-    });
-
-  }
 
   sendMessage() {
     const message = {
